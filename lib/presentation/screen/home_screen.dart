@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../constants/enum.dart';
 import '../../logic/cubit/counter_cubit.dart';
+import 'button_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.title, required this.color});
@@ -104,36 +105,82 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 32,
                 width: double.infinity,
               ),
-              const Row(
+              Builder(
+                // use context.watch
+                builder: (context) {
+                  final counterState = context.watch<CounterCubit>().state;
+                  final internetState = context.watch<InternetCubit>().state;
+                  if (internetState is InternetConnected &&
+                      internetState.connectionType == ConnectionType.mobile) {
+                    return Text(
+                      'Counter : ${counterState.counterValue.toString()} Network : Mobile Data',
+                      style: const TextStyle(fontSize: 20),
+                    );
+                  } else if (internetState is InternetConnected &&
+                      internetState.connectionType == ConnectionType.wifi) {
+                    return Text(
+                      'Counter : ${counterState.counterValue.toString()} Network : Wi-Fi',
+                      style: const TextStyle(fontSize: 20),
+                    );
+                  } else if (internetState is InternetDisconnected) {
+                    return Text(
+                      'Counter : ${counterState.counterValue.toString()} Network : Disconnected',
+                      style: const TextStyle(fontSize: 20),
+                    );
+                  } else {
+                    return LinearProgressIndicator(color: widget.color);
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 32,
+                width: double.infinity,
+              ),
+              Builder(
+                // use context.select
+                builder: (context) {
+                  final counterValue = context
+                      .select((CounterCubit cubit) => cubit.state.counterValue);
+                  return Text(
+                    'Counter : ${counterValue.toString()}',
+                    style: const TextStyle(fontSize: 20),
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 32,
+                width: double.infinity,
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // RoundIconButton(
-                  //   onPressed: () {
-                  //     BlocProvider.of<CounterCubit>(context).increment();
-                  //     // OR
-                  //     // context.bloc<CounterCubit>().increment();
-                  //   },
-                  //   icon: Icons.add,
-                  //   color: widget.color,
-                  // ),
-                  // RoundIconButton(
-                  //   onPressed: () {
-                  //     BlocProvider.of<CounterCubit>(context).reset();
-                  //     // OR
-                  //     // context.bloc<CounterCubit>().reset();
-                  //   },
-                  //   icon: Icons.refresh_sharp,
-                  //   color: widget.color,
-                  // ),
-                  // RoundIconButton(
-                  //   onPressed: () {
-                  //     BlocProvider.of<CounterCubit>(context).decrement();
-                  //     // OR
-                  //     // context.bloc<CounterCubit>().decrement();
-                  //   },
-                  //   icon: Icons.remove,
-                  //   color: widget.color,
-                  // ),
+                  RoundIconButton(
+                    onPressed: () {
+                      BlocProvider.of<CounterCubit>(context).increment();
+                      // OR
+                      // context.bloc<CounterCubit>().increment();
+                    },
+                    icon: Icons.add,
+                    color: widget.color,
+                  ),
+                  RoundIconButton(
+                    onPressed: () {
+                      BlocProvider.of<CounterCubit>(context).reset();
+                      // OR
+                      // context.bloc<CounterCubit>().reset();
+                    },
+                    icon: Icons.refresh_sharp,
+                    color: widget.color,
+                  ),
+                  RoundIconButton(
+                    onPressed: () {
+                      BlocProvider.of<CounterCubit>(context).decrement();
+                      // OR
+                      // context.bloc<CounterCubit>().decrement();
+                    },
+                    icon: Icons.remove,
+                    color: widget.color,
+                  ),
                 ],
               ),
               const SizedBox(
