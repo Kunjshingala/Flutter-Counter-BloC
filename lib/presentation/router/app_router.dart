@@ -9,22 +9,27 @@ class AppRouter {
     switch (routeSettings.name) {
       case '/':
         return MaterialPageRoute(
-            builder: (_) => const HomeScreen(
-                title: 'Home Screen', color: Colors.deepOrange));
+          builder: (_) => const HomeScreen(
+            title: 'Home Screen',
+            color: Colors.deepOrange,
+          ),
+        );
 
       case '/second':
         return MaterialPageRoute(
-            builder: (_) => const SecondScreen(
-                  title: 'Second Screen',
-                  color: Colors.white,
-                ));
+          builder: (_) => const SecondScreen(
+            title: 'Second Screen',
+            color: Colors.white,
+          ),
+        );
 
       case '/third':
         return MaterialPageRoute(
-            builder: (_) => const ThirdScreen(
-                  title: 'Third Screen',
-                  color: Colors.green,
-                ));
+          builder: (_) => const ThirdScreen(
+            title: 'Third Screen',
+            color: Colors.green,
+          ),
+        );
 
       default:
         return null;
