@@ -16,7 +16,7 @@ class AppRouter {
         return MaterialPageRoute(
             builder: (_) => const SecondScreen(
                   title: 'Second Screen',
-                  color: Colors.grey,
+                  color: Colors.white,
                 ));
 
       case '/third':

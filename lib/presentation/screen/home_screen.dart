@@ -1,8 +1,9 @@
+import 'package:counter/constants/enum.dart';
+import 'package:counter/logic/cubit/internet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../logic/cubit/counter_cubit.dart';
-import 'button_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.title, required this.color});
@@ -19,13 +20,36 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: widget.color,
         title: Text(widget.title),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            BlocBuilder<InternetCubit, InternetState>(
+              builder: (context, state) {
+                if (state is InternetConnected &&
+                    state.connectionType == ConnectionType.wifi) {
+                  return const Text('Wifi',
+                      style:
+                          TextStyle(fontSize: 45, fontWeight: FontWeight.bold));
+                } else if (state is InternetConnected &&
+                    state.connectionType == ConnectionType.mobile) {
+                  return const Text('Mobile Data',
+                      style:
+                          TextStyle(fontSize: 45, fontWeight: FontWeight.bold));
+                } else if (state is InternetDisconnected) {
+                  return const Text('Disconnected',
+                      style:
+                          TextStyle(fontSize: 45, fontWeight: FontWeight.bold));
+                }
+                return const CircularProgressIndicator();
+              },
+            ),
+            const SizedBox(
+              height: 32,
+            ),
             const Text(
               'You have pushed the button this many times:',
             ),
@@ -68,36 +92,36 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 32,
               width: double.infinity,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                RoundIconButton(
-                  onPressed: () {
-                    BlocProvider.of<CounterCubit>(context).increment();
-                    // OR
-                    // context.bloc<CounterCubit>().increment();
-                  },
-                  icon: Icons.add,
-                  color: widget.color,
-                ),
-                RoundIconButton(
-                  onPressed: () {
-                    BlocProvider.of<CounterCubit>(context).reset();
-                    // OR
-                    // context.bloc<CounterCubit>().reset();
-                  },
-                  icon: Icons.refresh_sharp,
-                  color: widget.color,
-                ),
-                RoundIconButton(
-                  onPressed: () {
-                    BlocProvider.of<CounterCubit>(context).decrement();
-                    // OR
-                    // context.bloc<CounterCubit>().decrement();
-                  },
-                  icon: Icons.remove,
-                  color: widget.color,
-                ),
+                // RoundIconButton(
+                //   onPressed: () {
+                //     BlocProvider.of<CounterCubit>(context).increment();
+                //     // OR
+                //     // context.bloc<CounterCubit>().increment();
+                //   },
+                //   icon: Icons.add,
+                //   color: widget.color,
+                // ),
+                // RoundIconButton(
+                //   onPressed: () {
+                //     BlocProvider.of<CounterCubit>(context).reset();
+                //     // OR
+                //     // context.bloc<CounterCubit>().reset();
+                //   },
+                //   icon: Icons.refresh_sharp,
+                //   color: widget.color,
+                // ),
+                // RoundIconButton(
+                //   onPressed: () {
+                //     BlocProvider.of<CounterCubit>(context).decrement();
+                //     // OR
+                //     // context.bloc<CounterCubit>().decrement();
+                //   },
+                //   icon: Icons.remove,
+                //   color: widget.color,
+                // ),
               ],
             ),
             const SizedBox(
